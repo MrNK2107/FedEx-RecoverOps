@@ -39,7 +39,7 @@ export function LoginForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "jane.s@globalrecovery.com",
-      password: "password123",
+      password: "jane.s@globalrecovery.com",
     },
   });
 
@@ -48,14 +48,11 @@ export function LoginForm() {
     
     // Mock authentication logic
     setTimeout(() => {
-      // In a real app, the password would be hashed and compared on the server.
-      // For this demo, we'll do a simple string comparison.
       const user = MOCK_USERS.find(u => u.email === values.email);
-      const passwordIsValid = values.password === "password123"; // Mock password for all users
+      // For demo purposes, the password for any mock user is their email address.
+      const passwordIsValid = values.password === user?.email;
       
       if (user && passwordIsValid) {
-        // In a real app, you'd set a session cookie or JWT.
-        // Here, we'll use localStorage for demo purposes.
         localStorage.setItem('loggedInUserId', user.id);
         router.push('/dashboard');
       } else {
