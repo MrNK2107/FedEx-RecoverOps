@@ -71,29 +71,36 @@ export const getCases = async (filters?: { status?: Case['status'], dcaId?: stri
   if (filters?.dcaId) {
     cases = cases.filter(c => c.assignedDCAId === filters.dcaId);
   }
-  return Promise.resolve(cases);
+  return Promise.resolve(JSON.parse(JSON.stringify(cases)));
 };
 
 export const getCaseById = async (id: string): Promise<Case | undefined> => {
-  return Promise.resolve(MOCK_CASES.find(c => c.id === id));
+  return Promise.resolve(JSON.parse(JSON.stringify(MOCK_CASES.find(c => c.id === id))));
 };
 
 export const getDCAs = async (filters?: { dcaId?: string }): Promise<DCA[]> => {
   if (filters?.dcaId) {
-    return Promise.resolve(MOCK_DCAS.filter(dca => dca.id === filters.dcaId));
+    return Promise.resolve(JSON.parse(JSON.stringify(MOCK_DCAS.filter(dca => dca.id === filters.dcaId))));
   }
-  return Promise.resolve(MOCK_DCAS);
+  return Promise.resolve(JSON.parse(JSON.stringify(MOCK_DCAS)));
 };
 
 export const getDCAById = async (id: string): Promise<DCA | undefined> => {
-    return Promise.resolve(MOCK_DCAS.find(dca => dca.id === id));
+    return Promise.resolve(JSON.parse(JSON.stringify(MOCK_DCAS.find(dca => dca.id === id))));
 };
 
 export const getUser = async (): Promise<User> => {
-    // For demo purposes, we cycle through users on refresh to simulate different roles
-    // In a real app, this would be derived from Firebase Auth state.
-    const userIndex = new Date().getSeconds() % MOCK_USERS.length;
-    return Promise.resolve(MOCK_USERS[userIndex]);
+    // For demo purposes, check localStorage for a logged-in user ID.
+    // In a real app, this would be derived from a secure session/JWT.
+    if (typeof window !== 'undefined') {
+        const userId = localStorage.getItem('loggedInUserId');
+        if (userId) {
+            const user = MOCK_USERS.find(u => u.id === userId);
+            if (user) return Promise.resolve(JSON.parse(JSON.stringify(user)));
+        }
+    }
+    // Default to the first user (FedEx Admin) if no one is logged in.
+    return Promise.resolve(JSON.parse(JSON.stringify(MOCK_USERS[0])));
 };
 
 export const addCase = async (newCase: Omit<Case, 'id' | 'history' | 'sla'>) => {

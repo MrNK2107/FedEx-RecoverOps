@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { MOCK_USERS } from '@/lib/data';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -31,6 +33,7 @@ const formSchema = z.object({
 export function LoginForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,10 +45,24 @@ export function LoginForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    // Mock API call
+    
+    // Mock authentication logic
     setTimeout(() => {
-      // In a real app, you'd handle auth state here
-      router.push('/dashboard');
+      const user = MOCK_USERS.find(u => u.email === values.email);
+      
+      if (user) {
+        // In a real app, you'd set a session cookie or JWT.
+        // Here, we'll use localStorage for demo purposes.
+        localStorage.setItem('loggedInUserId', user.id);
+        router.push('/dashboard');
+      } else {
+        toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: "Invalid email or password.",
+        });
+        setIsSubmitting(false);
+      }
     }, 1000);
   }
 
