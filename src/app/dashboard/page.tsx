@@ -25,7 +25,16 @@ export default function DashboardPage() {
     async function fetchData() {
       const userData = await getUser();
       setUser(userData);
-      const caseData = await getCases(userData.role === 'dca_admin' ? { dcaId: userData.dcaId } : {});
+      
+      let caseData;
+      if (userData.role === 'dca_admin') {
+        caseData = await getCases({ dcaId: userData.dcaId });
+      } else if (userData.role === 'dca_employee') {
+         caseData = await getCases({ employeeId: userData.id });
+      } else {
+        caseData = await getCases();
+      }
+      
       setCases(caseData);
       setLoading(false);
     }

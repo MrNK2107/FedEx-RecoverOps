@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
-import { Bell, Home, Briefcase, BarChart3, Settings } from "lucide-react";
+import { Bell, Home, Briefcase, BarChart3, Settings, Users } from "lucide-react";
 import { Logo } from "@/components/icons/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ const navItems = [
   { href: "/dashboard", icon: Home, label: "Overview", roles: ['fedex_admin', 'dca_admin', 'dca_employee'] },
   { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs", roles: ['fedex_admin'] },
   { href: "/dashboard/dcas", icon: Briefcase, label: "Agency", roles: ['dca_admin'] },
+  { href: "/dashboard/team", icon: Users, label: "Team", roles: ['dca_admin'] },
   { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics", roles: ['fedex_admin'] },
   { href: "/dashboard/settings", icon: Settings, label: "Settings", roles: ['fedex_admin', 'dca_admin', 'dca_employee'] },
 ];

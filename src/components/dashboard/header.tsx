@@ -13,6 +13,7 @@ import {
   Search,
   PanelLeft,
   LogOut,
+  Users,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -63,6 +64,7 @@ export function DashboardHeader() {
     { href: "/dashboard", icon: Home, label: "Overview", roles: ['fedex_admin', 'dca_admin', 'dca_employee'] },
     { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs", roles: ['fedex_admin'] },
     { href: "/dashboard/dcas", icon: Briefcase, label: "Agency", roles: ['dca_admin'] },
+    { href: "/dashboard/team", icon: Users, label: "Team", roles: ['dca_admin'] },
     { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics", roles: ['fedex_admin'] },
     { href: "/dashboard/settings", icon: Settings, label: "Settings", roles: ['fedex_admin', 'dca_admin', 'dca_employee'] },
   ];

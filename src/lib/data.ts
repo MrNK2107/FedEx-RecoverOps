@@ -3,14 +3,14 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const userAvatar = PlaceHolderImages.find(img => img.id === 'user-avatar')?.imageUrl || 'https://picsum.photos/seed/100/40/40';
 
-export const MOCK_USERS: User[] = [
+export let MOCK_USERS: User[] = [
   { id: 'user-1', name: 'Alex Johnson', email: 'alex.j@fedex.com', role: 'fedex_admin', avatarUrl: userAvatar },
   { id: 'user-2', name: 'Jane Smith', email: 'jane.s@globalrecovery.com', role: 'dca_admin', dcaId: 'dca-1', avatarUrl: 'https://picsum.photos/seed/101/40/40' },
   { id: 'user-3', name: 'Bob Williams', email: 'bob.w@globalrecovery.com', role: 'dca_employee', dcaId: 'dca-1', avatarUrl: 'https://picsum.photos/seed/102/40/40' },
   { id: 'user-4', name: 'Samantha Green', email: 'sam.g@vertex.com', role: 'dca_admin', dcaId: 'dca-2', avatarUrl: 'https://picsum.photos/seed/103/40/40' },
 ];
 
-export const MOCK_DCAS: DCA[] = [
+export let MOCK_DCAS: DCA[] = [
   { id: 'dca-1', name: 'Global Recovery Inc.', reputationScore: 92, currentLoad: 180, capacity: 250, slaCompliance: 98, recoverySuccessRate: 75, updateDiscipline: 95 },
   { id: 'dca-2', name: 'Vertex Financial', reputationScore: 85, currentLoad: 120, capacity: 150, slaCompliance: 91, recoverySuccessRate: 68, updateDiscipline: 88 },
   { id: 'dca-3', name: 'Quantum Collections', reputationScore: 78, currentLoad: 295, capacity: 300, slaCompliance: 85, recoverySuccessRate: 62, updateDiscipline: 81 },
@@ -46,7 +46,7 @@ const generateMockCases = (count: number): Case[] => {
       recoveryProbability: Math.random(),
       urgencyScore: Math.floor(Math.random() * 100),
       assignedDCAId: dcaId,
-      assignedDCAEmployeeId: dcaId ? `user-${(i % 2) + 2}`: undefined, // mock employees
+      assignedDCAEmployeeId: dcaId ? `user-3`: undefined, // mock employee bob.w
       sla: {
         dueDate: slaDueDate.toISOString(),
         breachRisk: Math.random(),
@@ -63,13 +63,16 @@ const generateMockCases = (count: number): Case[] => {
 let MOCK_CASES: Case[] = generateMockCases(25);
 
 // Simulate a database
-export const getCases = async (filters?: { status?: Case['status'], dcaId?: string }): Promise<Case[]> => {
+export const getCases = async (filters?: { status?: Case['status'], dcaId?: string, employeeId?: string }): Promise<Case[]> => {
   let cases = MOCK_CASES;
   if (filters?.status) {
     cases = cases.filter(c => c.status === filters.status);
   }
   if (filters?.dcaId) {
     cases = cases.filter(c => c.assignedDCAId === filters.dcaId);
+  }
+   if (filters?.employeeId) {
+    cases = cases.filter(c => c.assignedDCAEmployeeId === filters.employeeId);
   }
   return Promise.resolve(JSON.parse(JSON.stringify(cases)));
 };
@@ -88,6 +91,15 @@ export const getDCAs = async (filters?: { dcaId?: string }): Promise<DCA[]> => {
 export const getDCAById = async (id: string): Promise<DCA | undefined> => {
     return Promise.resolve(JSON.parse(JSON.stringify(MOCK_DCAS.find(dca => dca.id === id))));
 };
+
+export const getUsers = async (filters?: { dcaId?: string }): Promise<User[]> => {
+    let users = MOCK_USERS;
+    if (filters?.dcaId) {
+        users = users.filter(u => u.dcaId === filters.dcaId);
+    }
+    return Promise.resolve(JSON.parse(JSON.stringify(users)));
+};
+
 
 export const getUser = async (): Promise<User> => {
     // For demo purposes, check localStorage for a logged-in user ID.
@@ -126,6 +138,18 @@ export const addCase = async (newCase: Omit<Case, 'id' | 'history' | 'sla'>) => 
     MOCK_CASES.unshift(caseWithId);
     return Promise.resolve(caseWithId);
 }
+
+export const addUser = async (newUser: Omit<User, 'id' | 'avatarUrl'>) => {
+    const newId = `user-${MOCK_USERS.length + 1}`;
+    const userWithId: User = {
+        ...newUser,
+        id: newId,
+        avatarUrl: `https://picsum.photos/seed/${100 + MOCK_USERS.length}/40/40`,
+    };
+    MOCK_USERS.push(userWithId);
+    return Promise.resolve(userWithId);
+};
+
 
 export const updateCase = async (caseId: string, updates: Partial<Case>): Promise<Case | undefined> => {
     const caseIndex = MOCK_CASES.findIndex(c => c.id === caseId);
