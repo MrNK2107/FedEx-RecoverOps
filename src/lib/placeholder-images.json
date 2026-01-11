@@ -1,0 +1,22 @@
+{
+  "placeholderImages": [
+    {
+      "id": "user-avatar",
+      "description": "User avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1590086782792-42dd2350140d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3Njc4NjAzMDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "fedex-admin-dashboard",
+      "description": "FedEx Admin Dashboard Screenshot",
+      "imageUrl": "https://images.unsplash.com/photo-1634804658555-248d9e9a212f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkYXNoYm9hcmQlMjBzY3JlZW58ZW58MHx8fHwxNzY4MDk1OTU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dashboard screen"
+    },
+    {
+      "id": "dca-admin-dashboard",
+      "description": "DCA Admin Dashboard Screenshot",
+      "imageUrl": "https://images.unsplash.com/photo-1748609664795-11546ad62000?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxpbnRlcmZhY2UlMjBhbmFseXRpY3N8ZW58MHx8fHwxNzY4MTA0MTQxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "interface analytics"
+    }
+  ]
+}
