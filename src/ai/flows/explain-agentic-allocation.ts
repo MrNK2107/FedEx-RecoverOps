@@ -32,6 +32,7 @@ export async function explainAgenticAllocation(
   return explainAgenticAllocationFlow(input);
 }
 
+//prompt
 const prompt = ai.definePrompt({
   name: 'explainAgenticAllocationPrompt',
   input: {schema: ExplainAgenticAllocationInputSchema},
@@ -49,6 +50,7 @@ const prompt = ai.definePrompt({
   Example: "Assignment was based on the agency's strong reputation score of 95 and low utilization, ensuring capacity for this high-risk case."
   `,
 });
+
 
 const explainAgenticAllocationFlow = ai.defineFlow(
   {
