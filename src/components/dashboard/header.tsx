@@ -60,14 +60,14 @@ export function DashboardHeader() {
   }
 
   const navItems = [
-    { href: "/dashboard", icon: Home, label: "Overview" },
-    { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs", roles: ['fedex_admin', 'dca_admin'] },
-    { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
-    { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+    { href: "/dashboard", icon: Home, label: "Overview", roles: ['fedex_admin', 'dca_admin', 'dca_employee'] },
+    { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs", roles: ['fedex_admin'] },
+    { href: "/dashboard/dcas", icon: Briefcase, label: "Agency", roles: ['dca_admin'] },
+    { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics", roles: ['fedex_admin'] },
+    { href: "/dashboard/settings", icon: Settings, label: "Settings", roles: ['fedex_admin', 'dca_admin', 'dca_employee'] },
   ];
 
   const filteredNavItems = navItems.filter(item => {
-    if (!item.roles) return true;
     return item.roles.includes(user.role);
   });
 
@@ -91,7 +91,7 @@ export function DashboardHeader() {
             </Link>
              {filteredNavItems.map(({ href, icon: Icon, label }) => (
               <Link
-                key={href}
+                key={label}
                 href={href}
                 className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
               >
