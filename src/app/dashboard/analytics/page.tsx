@@ -1,4 +1,6 @@
-import { Metadata } from "next";
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -23,17 +25,38 @@ import {
 } from 'recharts';
 import { getDCAs, getCases } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
-
-export const metadata: Metadata = {
-  title: 'Analytics | FedEx Recovery Ops',
-  description: 'Analytics and Reporting for DCA Performance and Case Metrics.',
-};
+import type { DCA, Case } from "@/lib/definitions";
 
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
-export default async function AnalyticsPage() {
-  const dcas = await getDCAs();
-  const cases = await getCases();
+const recoveryOverTimeData = [
+    { name: 'Jan', Recovered: 4000, Overdue: 2400 },
+    { name: 'Feb', Recovered: 3000, Overdue: 1398 },
+    { name: 'Mar', Recovered: 2000, Overdue: 9800 },
+    { name: 'Apr', Recovered: 2780, Overdue: 3908 },
+    { name: 'May', Recovered: 1890, Overdue: 4800 },
+    { name: 'Jun', Recovered: 2390, Overdue: 3800 },
+];
+
+export default function AnalyticsPage() {
+  const [dcas, setDcas] = useState<DCA[]>([]);
+  const [cases, setCases] = useState<Case[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [dcaData, caseData] = await Promise.all([getDCAs(), getCases()]);
+        setDcas(dcaData);
+        setCases(caseData);
+      } catch (error) {
+        console.error("Failed to fetch analytics data", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   const dcaPerformanceData = dcas.map(dca => ({
     name: dca.name.replace(' Inc.', '').replace(' Financial', '').replace(' Collections', '').replace(' Partners', ''),
@@ -53,14 +76,13 @@ export default async function AnalyticsPage() {
     return acc;
   }, [] as { name: string; value: number }[]);
 
-  const recoveryOverTimeData = [
-    { name: 'Jan', Recovered: 4000, Overdue: 2400 },
-    { name: 'Feb', Recovered: 3000, Overdue: 1398 },
-    { name: 'Mar', Recovered: 2000, Overdue: 9800 },
-    { name: 'Apr', Recovered: 2780, Overdue: 3908 },
-    { name: 'May', Recovered: 1890, Overdue: 4800 },
-    { name: 'Jun', Recovered: 2390, Overdue: 3800 },
-  ];
+  if (loading) {
+      return (
+          <div className="flex justify-center items-center h-96">
+              <p>Loading analytics...</p>
+          </div>
+      )
+  }
 
   return (
     <div className="space-y-8">
