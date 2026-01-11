@@ -1,24 +1,21 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Users, BrainCircuit, GitBranch } from 'lucide-react';
+import { ArrowRight, CheckCircle, Users, BrainCircuit, GitBranch, ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/icons/logo';
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <Logo className="h-6 w-6 text-primary" />
-            <span className="font-headline text-lg">Recovery Nexus</span>
+            <span className="font-headline text-lg">Recovery Ops</span>
           </Link>
-          <nav className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" asChild>
-              <Link href="/login">Sign In</Link>
-            </Button>
+          <nav className="ml-auto flex items-center gap-4">
             <Button asChild>
-              <Link href="/login">Get Started</Link>
+              <Link href="/login">Get Started <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </nav>
         </div>
@@ -26,76 +23,75 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 bg-primary/5">
-           <div
+        <section className="relative py-24 md:py-32 overflow-hidden">
+          <div
             aria-hidden="true"
             className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-20"
           >
             <div className="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 "></div>
             <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300"></div>
           </div>
-          <div className="container text-center">
-            <div className="bg-primary/10 text-primary font-semibold inline-flex items-center gap-2 rounded-full px-4 py-1 text-sm mb-4 border border-primary/20">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              Enterprise-Grade Vendor Governance
-            </div>
-            <h1 className="font-headline text-4xl font-bold tracking-tighter md:text-6xl">
+          <div className="container text-center relative">
+            <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
               Intelligent Recovery. <br /> Absolute Governance.
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-              FedEx Recovery Nexus transforms debt collection by replacing manual processes with an AI-powered platform for managing Debt Collection Agencies (DCAs).
+              The internal platform for transforming FedEx's debt collection with AI-powered vendor governance, case prioritization, and real-time oversight.
             </p>
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-8 flex justify-center">
               <Button size="lg" asChild>
-                <Link href="/login">Request a Demo</Link>
-              </Button>
-              <Button size="lg" variant="outline">
-                Learn More
+                <Link href="/login">Access Your Dashboard</Link>
               </Button>
             </div>
           </div>
         </section>
 
         {/* Core Capabilities Section */}
-        <section className="py-20 md:py-28 bg-background">
+        <section className="py-20 md:py-28 bg-muted/40">
           <div className="container">
-            <div className="text-center">
-              <h2 className="font-headline text-3xl font-bold tracking-tight">Core Capabilities</h2>
+            <div className="text-center max-w-2xl mx-auto">
+              <h2 className="font-headline text-3xl font-bold tracking-tight">A Unified Platform for Control and Efficiency</h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                A unified platform for control, efficiency, and intelligence.
+                Recovery Ops replaces fragmented workflows with a single source of truth, empowering FedEx with unprecedented control and intelligence.
               </p>
             </div>
-            <div className="mt-12 grid gap-8 md:grid-cols-3">
-              <Card>
+            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <Card className="text-center bg-background/50">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <GitBranch className="text-primary" />
+                  <div className="mx-auto bg-primary/10 rounded-full h-12 w-12 flex items-center justify-center">
+                      <GitBranch className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle className="font-headline pt-2">
                     Centralized Case Registry
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Unify all overdue cases into a single source of truth with strict lifecycle states, eliminating spreadsheets and fragmented tracking.
+                    Unify all overdue cases with strict lifecycle states, eliminating spreadsheets and fragmented tracking for complete visibility.
                   </p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="text-center bg-background/50">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BrainCircuit className="text-primary" />
+                  <div className="mx-auto bg-primary/10 rounded-full h-12 w-12 flex items-center justify-center">
+                    <BrainCircuit className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle className="font-headline pt-2">
                     AI-Powered Strategy
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Leverage AI to score and prioritize cases, recommend optimal recovery strategies, and generate human-readable explanations for every decision.
+                    Leverage AI to score cases, recommend optimal recovery strategies, and generate human-readable explanations for every decision.
                   </p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="text-center bg-background/50">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="text-primary" />
+                   <div className="mx-auto bg-primary/10 rounded-full h-12 w-12 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle className="font-headline pt-2">
                     Agentic Allocation
                   </CardTitle>
                 </CardHeader>
@@ -110,7 +106,7 @@ export default function LandingPage() {
         </section>
 
         {/* Role-Based Benefits Section */}
-        <section className="py-20 md:py-28 bg-muted/30">
+        <section className="py-20 md:py-28 bg-background">
           <div className="container grid gap-16 md:grid-cols-2 items-center">
             <div>
               <span className="text-sm font-semibold text-primary">FOR FEDEX ADMINS</span>
@@ -118,7 +114,7 @@ export default function LandingPage() {
               <p className="mt-4 text-lg text-muted-foreground">
                 Gain a unified, real-time view of your entire recovery portfolio. Monitor DCA performance, enforce SLAs, and audit AI-driven decisions from a central dashboard.
               </p>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-6 space-y-4 text-muted-foreground">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                   <span>Global dashboards with real-time performance metrics.</span>
@@ -133,16 +129,41 @@ export default function LandingPage() {
                 </li>
               </ul>
             </div>
-             <div className="bg-white p-6 rounded-lg shadow-md border">
-              <img src="https://picsum.photos/seed/dashboard/600/400" alt="FedEx Admin Dashboard" className="rounded-lg" data-ai-hint="dashboard screen" />
+             <div className="bg-muted/40 p-8 rounded-lg">
+                <div className="bg-background rounded-lg shadow-lg p-2 border">
+                    <div className="flex items-center gap-2 p-2 border-b">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div className="p-4">
+                        <h4 className="font-bold font-headline">DCA Performance</h4>
+                        <div className="h-40 bg-primary/10 rounded-md mt-4 flex items-center justify-center">
+                            <p className="text-sm text-primary/50">Chart Placeholder</p>
+                        </div>
+                    </div>
+                </div>
             </div>
           </div>
         </section>
 
-        <section className="py-20 md:py-28 bg-background">
+        <section className="py-20 md:py-28 bg-muted/40">
           <div className="container grid gap-16 md:grid-cols-2 items-center">
-             <div className="bg-white p-6 rounded-lg shadow-md border order-last md:order-first">
-              <img src="https://picsum.photos/seed/dca/600/400" alt="DCA Admin Dashboard" className="rounded-lg" data-ai-hint="interface analytics" />
+             <div className="bg-background p-8 rounded-lg order-last md:order-first">
+                 <div className="flex items-center justify-center bg-muted/40 p-4 rounded-lg">
+                     <Users className="h-16 w-16 text-primary/30" />
+                     <div className="ml-4 flex-1 space-y-2">
+                        <div className="h-4 bg-primary/10 rounded"></div>
+                        <div className="h-4 bg-primary/10 rounded w-5/6"></div>
+                     </div>
+                 </div>
+                 <div className="flex items-center justify-center bg-muted/40 p-4 rounded-lg mt-4">
+                     <ShieldCheck className="h-16 w-16 text-primary/30" />
+                     <div className="ml-4 flex-1 space-y-2">
+                        <div className="h-4 bg-primary/10 rounded"></div>
+                        <div className="h-4 bg-primary/10 rounded w-5/6"></div>
+                     </div>
+                 </div>
             </div>
             <div>
               <span className="text-sm font-semibold text-primary">FOR DCA PARTNERS</span>
@@ -150,7 +171,7 @@ export default function LandingPage() {
               <p className="mt-4 text-lg text-muted-foreground">
                 Work on prioritized cases with clear, AI-recommended strategies. Manage your team's workload and track performance within a secure, isolated environment.
               </p>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-6 space-y-4 text-muted-foreground">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                   <span>Role-based access ensures data is strictly firewalled.</span>
@@ -169,9 +190,9 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t">
+      <footer className="border-t bg-muted/40">
         <div className="container py-8 text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} FedEx Recovery Nexus. A conceptual platform. All rights reserved.
+            © {new Date().getFullYear()} FedEx Recovery Ops. An internal platform. All rights reserved.
         </div>
       </footer>
     </div>

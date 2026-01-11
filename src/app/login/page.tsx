@@ -10,7 +10,7 @@ export default function LoginPage() {
             <Logo className="h-8 w-8 text-primary-foreground" />
           </div>
           <h1 className="font-headline text-2xl font-bold text-primary">
-            FedEx Recovery Nexus
+            FedEx Recovery Ops
           </h1>
           <p className="text-sm text-muted-foreground">
             Sign in to access your dashboard.

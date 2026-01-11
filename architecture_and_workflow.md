@@ -1,8 +1,8 @@
-# FedEx Recovery Nexus: System Architecture & Workflow
+# FedEx Recovery Ops: System Architecture & Workflow
 
 ## 1. System Architecture
 
-The FedEx Recovery Nexus platform is built on a modern, serverless architecture leveraging Next.js for the frontend and Firebase for the backend services. This combination allows for rapid development, scalability, and a secure, real-time user experience.
+The FedEx Recovery Ops platform is built on a modern, serverless architecture leveraging Next.js for the frontend and Firebase for the backend services. This combination allows for rapid development, scalability, and a secure, real-time user experience.
 
 ### Core Components:
 

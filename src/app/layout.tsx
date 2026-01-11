@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'FedEx Recovery Nexus',
+  title: 'FedEx Recovery Ops',
   description: 'Vendor Governance and Recovery Intelligence Platform',
 };
 

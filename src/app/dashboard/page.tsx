@@ -12,7 +12,7 @@ import { CaseTable } from '@/components/dashboard/cases/case-table';
 import { AddCaseDialog } from '@/components/dashboard/cases/add-case-dialog';
 
 export const metadata: Metadata = {
-  title: 'Dashboard | FedEx Recovery Nexus',
+  title: 'Dashboard | FedEx Recovery Ops',
   description: 'Centralized Case Registry and Overview',
 };
 

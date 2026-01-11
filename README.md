@@ -1,8 +1,8 @@
-# FedEx RecoveryOps
+# FedEx Recovery Ops
 
 **Vendor Governance & Recovery Intelligence Platform**
 
-FedEx Recovery Nexus is a hackathon-grade but enterprise-realistic web platform designed to manage and govern outsourced Debt Collection Agencies (DCAs). It replaces Excel sheets and email-based coordination with centralized workflows, role-based access control, SLA enforcement, and AI-driven decision intelligence.
+FedEx Recovery Ops is a hackathon-grade but enterprise-realistic web platform designed to manage and govern outsourced Debt Collection Agencies (DCAs). It replaces Excel sheets and email-based coordination with centralized workflows, role-based access control, SLA enforcement, and AI-driven decision intelligence.
 
 This project demonstrates how large enterprises like FedEx can retain full control, visibility, and accountability over third-party recovery operations while allowing DCAs to execute independently.
 
@@ -18,7 +18,7 @@ FedEx handles a high volume of overdue customer payments and relies on multiple 
 - No agent-level accountability  
 - Zero predictive or governance intelligence  
 
-FedEx Recovery Nexus addresses these gaps with a centralized control and intelligence layer.
+FedEx Recovery Ops addresses these gaps with a centralized control and intelligence layer.
 
 ---
 
@@ -141,4 +141,3 @@ This is a focused governance and intelligence prototype.
 ## License
 
 This project is created for hackathon and educational purposes only.
-

@@ -52,7 +52,7 @@ export async function DashboardHeader() {
               className="flex items-center gap-2 text-lg font-semibold mb-4"
             >
               <Logo className="h-6 w-6 text-primary" />
-              <span className="sr-only">Recovery Nexus</span>
+              <span className="sr-only">Recovery Ops</span>
             </Link>
             <Link
               href="/dashboard"
