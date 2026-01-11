@@ -9,6 +9,7 @@ import {
   Search,
   PanelLeft,
   LogOut,
+  ChevronsRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -24,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/icons/logo";
 import { getUser } from "@/lib/data";
 import { Badge } from "../ui/badge";
+import { RunAllocationDialog } from "./cases/run-allocation-dialog";
 
 export async function DashboardHeader() {
   const user = await getUser();
@@ -85,16 +87,19 @@ export async function DashboardHeader() {
       </Sheet>
 
       <div className="w-full flex-1">
-        <form>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search cases, DCAs..."
-              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-            />
-          </div>
-        </form>
+        <div className="flex items-center gap-4">
+            <form className="flex-1">
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                    type="search"
+                    placeholder="Search cases, DCAs..."
+                    className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+                    />
+                </div>
+            </form>
+            {user.role === 'fedex_admin' && <RunAllocationDialog />}
+        </div>
       </div>
 
       <DropdownMenu>

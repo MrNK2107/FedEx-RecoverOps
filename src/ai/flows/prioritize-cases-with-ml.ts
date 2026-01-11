@@ -22,9 +22,9 @@ export type PrioritizeCasesWithMLInput = z.infer<typeof PrioritizeCasesWithMLInp
 const PrioritizeCasesWithMLOutputSchema = z.object({
   recoveryProbability: z
     .number()
-    .describe('The probability of recovery, between 0 and 1.'),
-  urgencyScore: z.number().describe('The urgency score of the case, between 0 and 100.'),
-  recommendation: z.string().describe('Recommended next steps for the case.'),
+    .describe('The probability of recovery, between 0 and 1. Higher for lower aging days and higher historical success.'),
+  urgencyScore: z.number().describe('The urgency score of the case, between 0 and 100. This should be higher for larger amounts and longer aging days.'),
+  recommendation: z.string().describe('A brief, one-sentence recommendation for the next step.'),
 });
 export type PrioritizeCasesWithMLOutput = z.infer<typeof PrioritizeCasesWithMLOutputSchema>;
 
@@ -38,18 +38,21 @@ const prompt = ai.definePrompt({
   name: 'prioritizeCasesWithMLPrompt',
   input: {schema: PrioritizeCasesWithMLInputSchema},
   output: {schema: PrioritizeCasesWithMLOutputSchema},
-  prompt: `You are an expert in case prioritization and recovery.
+  system: `You are a case prioritization expert for FedEx, specializing in debt recovery. Your role is to analyze new cases and assign a `recoveryProbability` and an `urgencyScore`.
 
-  Based on the amount, aging days, and historical success rate of similar cases, determine the recovery probability and urgency score for the case.  The recoveryProbability should be a number between 0 and 1 (inclusive). The urgencyScore should be a number between 0 and 100 (inclusive).
+- **recoveryProbability**: A score from 0.0 to 1.0. This should DECREASE as `agingDays` increase. A higher `historicalSuccessRate` should positively influence this score.
+- **urgencyScore**: A score from 0 to 100. This should INCREASE with both higher `amount` and higher `agingDays`. A very high amount or very high aging should result in a score close to 100.
 
-  Also, provide a brief recommendation for the next steps to take for the case.
+Base your calculations on these rules and the provided data. Also provide a brief, one-sentence recommendation for the next step.
+`,
+  prompt: `
+Case Data:
+- Amount: {{{amount}}}
+- Aging Days: {{{agingDays}}}
+- Historical Success Rate: {{{historicalSuccessRate}}}
 
-  Amount: {{{amount}}}
-  Aging Days: {{{agingDays}}}
-  Historical Success Rate: {{{historicalSuccessRate}}}
-
-  Output the recoveryProbability, urgencyScore and recommendation in JSON format.
-  `,
+Please provide the `recoveryProbability`, `urgencyScore`, and `recommendation` in the required JSON format.
+`,
 });
 
 const prioritizeCasesWithMLFlow = ai.defineFlow(

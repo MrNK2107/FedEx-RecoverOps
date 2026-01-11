@@ -2,8 +2,10 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { addCase } from '@/lib/data';
+import { addCase, getCases, getDCAs, updateCase } from '@/lib/data';
 import { prioritizeCasesWithML } from '@/ai/flows/prioritize-cases-with-ml';
+import type { CaseActivityLog, DCA } from '@/lib/definitions';
+import { explainAgenticAllocation } from '@/ai/flows/explain-agentic-allocation';
 
 const CreateCaseSchema = z.object({
   customerName: z.string().min(1),
@@ -40,4 +42,57 @@ export async function createCaseAction(values: z.infer<typeof CreateCaseSchema>)
   });
 
   revalidatePath('/dashboard');
+}
+
+export async function runAgenticAllocationAction() {
+    const newCases = await getCases({ status: 'New' });
+    const dcas = await getDCAs();
+
+    if (newCases.length === 0) {
+        return { allocatedCount: 0 };
+    }
+    
+    let allocatedCount = 0;
+    
+    // Sort DCAs by a score that balances reputation and available capacity
+    const sortedDcas = dcas.sort((a, b) => {
+        const scoreA = a.reputationScore * (1 - (a.currentLoad / a.capacity));
+        const scoreB = b.reputationScore * (1 - (b.currentLoad / b.capacity));
+        return scoreB - scoreA;
+    });
+
+    for (const caseData of newCases) {
+        const bestDca = sortedDcas.find(d => (d.currentLoad < d.capacity));
+
+        if(bestDca) {
+            const explanationResult = await explainAgenticAllocation({
+                caseId: caseData.id,
+                dcaId: bestDca.id,
+                agencyReputationScore: bestDca.reputationScore,
+                currentLoad: bestDca.currentLoad,
+                capacity: bestDca.capacity,
+                slaBreachRisk: caseData.sla.breachRisk
+            });
+            
+            const newLogEntry: CaseActivityLog = {
+                id: `log-${caseData.id}-${caseData.history.length + 1}`,
+                caseId: caseData.id,
+                timestamp: new Date().toISOString(),
+                activity: `Case assigned to ${bestDca.name}.`,
+                user: "Agentic Allocator",
+                explanation: explanationResult.explanation,
+            };
+
+            await updateCase(caseData.id, {
+                assignedDCAId: bestDca.id,
+                status: 'Assigned',
+                history: [ ...caseData.history, newLogEntry ]
+            });
+
+            allocatedCount++;
+        }
+    }
+    
+    revalidatePath('/dashboard');
+    return { allocatedCount };
 }
