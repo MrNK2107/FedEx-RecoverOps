@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import Image from 'next/image';
 import {
@@ -123,9 +124,11 @@ export async function DashboardHeader() {
             Role: <Badge variant="outline">{roleDisplay[user.role]}</Badge>
           </div>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuItem asChild>
+             <Link href="/dashboard/settings">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -140,3 +143,5 @@ export async function DashboardHeader() {
     </header>
   );
 }
+
+    

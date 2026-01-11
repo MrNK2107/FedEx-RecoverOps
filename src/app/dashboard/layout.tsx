@@ -1,3 +1,4 @@
+
 import { DashboardHeader } from "@/components/dashboard/header";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
 
@@ -7,7 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] light-theme">
       <SidebarNav />
       <div className="flex flex-col">
         <DashboardHeader />
@@ -18,3 +19,5 @@ export default function DashboardLayout({
     </div>
   );
 }
+
+    
