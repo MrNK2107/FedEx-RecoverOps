@@ -37,7 +37,6 @@ export async function createCaseAction(values: z.infer<typeof CreateCaseSchema>)
     recoveryProbability,
     urgencyScore,
     recommendedStrategy: recommendation,
-    slaBreachRisk: Math.random(),
   });
 
   revalidatePath('/dashboard');

@@ -94,7 +94,7 @@ export function AllocationView({ caseData: initialCaseData, dca }: { caseData: C
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={handleAllocate} disabled={isAllocating || !selectedDca} className="w-full">
+        <Button onClick={handleAllocate} disabled={isAllocating || !selectedDca || selectedDca === initialCaseData.assignedDCAId} className="w-full">
           {isAllocating ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -12,7 +12,7 @@ import { CaseTable } from '@/components/dashboard/cases/case-table';
 import { AddCaseDialog } from '@/components/dashboard/cases/add-case-dialog';
 
 export const metadata: Metadata = {
-  title: 'Dashboard | FedEx DCA-OS',
+  title: 'Dashboard | FedEx Recovery Nexus',
   description: 'Centralized Case Registry and Overview',
 };
 
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">${totalAmount.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% from last month
+              Across all active cases
             </p>
           </CardContent>
         </Card>
@@ -59,7 +59,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">+{activeCases}</div>
             <p className="text-xs text-muted-foreground">
-              +180.1% from last month
+              Currently being worked on
             </p>
           </CardContent>
         </Card>
@@ -71,19 +71,21 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">+{closedThisMonth}</div>
             <p className="text-xs text-muted-foreground">
-              +19% from last month
+              This month
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Escalation Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">Avg. Breach Risk</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5.2%</div>
+            <div className="text-2xl font-bold">
+              {(cases.reduce((sum, c) => sum + c.sla.breachRisk, 0) / cases.length * 100).toFixed(1)}%
+            </div>
             <p className="text-xs text-muted-foreground">
-              -1.2% from last month
+              Average SLA breach prediction
             </p>
           </CardContent>
         </Card>

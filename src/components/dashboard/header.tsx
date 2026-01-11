@@ -4,11 +4,11 @@ import {
   Bell,
   Home,
   Briefcase,
-  Users,
   BarChart3,
   Settings,
   Search,
   PanelLeft,
+  LogOut,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -23,11 +23,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/icons/logo";
 import { getUser } from "@/lib/data";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Badge } from "../ui/badge";
 
 export async function DashboardHeader() {
   const user = await getUser();
-  const userAvatar = PlaceHolderImages.find(img => img.id === 'user-avatar');
+
+  const roleDisplay: Record<typeof user.role, string> = {
+    fedex_admin: 'FedEx Admin',
+    dca_admin: 'DCA Admin',
+    dca_employee: 'DCA Employee',
+  }
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
@@ -45,7 +50,7 @@ export async function DashboardHeader() {
               className="flex items-center gap-2 text-lg font-semibold mb-4"
             >
               <Logo className="h-6 w-6 text-primary" />
-              <span className="sr-only">DCA-OS</span>
+              <span className="sr-only">Recovery Nexus</span>
             </Link>
             <Link
               href="/dashboard"
@@ -95,18 +100,35 @@ export async function DashboardHeader() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">
-            {userAvatar && <Image src={userAvatar.imageUrl} alt={user.name} width={40} height={40} className="rounded-full" data-ai-hint={userAvatar.imageHint}/>}
+            <Image src={user.avatarUrl} alt={user.name} width={40} height={40} className="rounded-full" />
             <span className="sr-only">Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+            Role: <Badge variant="outline">{roleDisplay[user.role]}</Badge>
+          </div>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/">Logout</Link>
+            <Link href="/">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

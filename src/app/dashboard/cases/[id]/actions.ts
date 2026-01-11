@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { getCaseById, getDCAById, updateCase } from "@/lib/data";
 import { generateRecoveryStrategy } from '@/ai/flows/generate-recovery-strategy';
 import { explainAgenticAllocation } from '@/ai/flows/explain-agentic-allocation';
+import type { CaseActivityLog } from '@/lib/definitions';
 
 export async function generateStrategyAction(caseId: string) {
   const caseData = await getCaseById(caseId);
@@ -17,17 +18,19 @@ export async function generateStrategyAction(caseId: string) {
     historicalSuccess: 'Similar cases have a 70% recovery rate with early settlement offers.', // Mock data
   });
   
+  const newLogEntry: CaseActivityLog = {
+    id: `log-${caseId}-${caseData.history.length + 1}`,
+    caseId,
+    timestamp: new Date().toISOString(),
+    activity: `Generated recovery strategy: ${result.recoveryApproach}.`,
+    user: "Recovery Strategy Engine",
+    explanation: result.explanation
+  };
+
   const updates = {
       recommendedStrategy: result.recoveryApproach,
       strategyExplanation: result.explanation,
-      history: [
-          ...caseData.history,
-          {
-              timestamp: new Date().toISOString(),
-              activity: `Generated recovery strategy: ${result.recoveryApproach}. Reason: ${result.explanation}`,
-              user: "Strategy Engine"
-          }
-      ]
+      history: [ ...caseData.history, newLogEntry ]
   };
 
   await updateCase(caseId, updates);
@@ -53,20 +56,22 @@ export async function allocateCaseAction(caseId: string, dcaId: string) {
         agencyReputationScore: dcaData.reputationScore,
         currentLoad: dcaData.currentLoad,
         capacity: dcaData.capacity,
-        slaBreachRisk: caseData.slaBreachRisk
+        slaBreachRisk: caseData.sla.breachRisk
     });
+
+    const newLogEntry: CaseActivityLog = {
+        id: `log-${caseId}-${caseData.history.length + 1}`,
+        caseId,
+        timestamp: new Date().toISOString(),
+        activity: `Case assigned to ${dcaData.name}.`,
+        user: "Agentic Allocator",
+        explanation: explanationResult.explanation,
+    };
 
     const updates = {
         assignedDCAId: dcaId,
         status: 'Assigned' as const,
-        history: [
-            ...caseData.history,
-            {
-                timestamp: new Date().toISOString(),
-                activity: `Case assigned to ${dcaData.name}. Explanation: ${explanationResult.explanation}`,
-                user: "Agentic Allocator"
-            }
-        ]
+        history: [ ...caseData.history, newLogEntry ]
     };
 
     await updateCase(caseId, updates);
