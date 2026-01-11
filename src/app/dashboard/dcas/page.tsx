@@ -19,7 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
-  title: 'DCA Management | FedEx DCA-OS',
+  title: 'DCA Management | FedEx Recovery Ops',
   description: 'Monitor and manage Debt Collection Agencies.',
 };
 
@@ -46,7 +46,7 @@ export default async function DcasPage() {
               <TableRow>
                 <TableHead>Agency</TableHead>
                 <TableHead>Reputation</TableHead>
-                <TableHead>Capacity</TableHead>
+                <TableHead>Workload</TableHead>
                 <TableHead>SLA Compliance</TableHead>
                 <TableHead className="text-right">Success Rate</TableHead>
               </TableRow>
@@ -57,15 +57,15 @@ export default async function DcasPage() {
                   <TableCell className="font-medium">{dca.name}</TableCell>
                   <TableCell>
                      <Badge variant={dca.reputationScore > 90 ? "default" : "secondary"} className={
-                        dca.reputationScore > 90 ? "bg-green-600 hover:bg-green-700" : dca.reputationScore > 80 ? "bg-yellow-500 hover:bg-yellow-600" : "bg-red-500 hover:bg-red-600"
+                        dca.reputationScore > 90 ? "bg-green-100 text-green-800 border-green-200" : dca.reputationScore > 80 ? "bg-yellow-100 text-yellow-800 border-yellow-200" : "bg-red-100 text-red-800 border-red-200"
                      }>
                         {dca.reputationScore}
                      </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                        <span>{`${((dca.currentLoad / dca.capacity) * 100).toFixed(0)}%`}</span>
-                        <Progress value={(dca.currentLoad / dca.capacity) * 100} className="w-24" />
+                        <span className="text-muted-foreground text-xs w-12">{dca.currentLoad} / {dca.capacity}</span>
+                        <Progress value={(dca.currentLoad / dca.capacity) * 100} className="w-24 h-2" />
                     </div>
                   </TableCell>
                   <TableCell>{dca.slaCompliance}%</TableCell>

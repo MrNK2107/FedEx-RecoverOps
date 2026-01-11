@@ -2,25 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer base {
   :root {
-    --background: 240 10% 97%;
+    --background: 240 10% 97%; /* #F2F2F7 */
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 251 57% 38%;
+    --primary: 251 57% 38%; /* #42299B */
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 251 100% 79%;
+    --accent: 257 100% 90%; /* #A694FF */
     --accent-foreground: 251 57% 38%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -41,7 +37,7 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 251 100% 79%;
+    --primary: 257 100% 90%; /* #A694FF */
     --primary-foreground: 251 57% 38%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -53,7 +49,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 251 100% 79%;
+    --ring: 257 100% 90%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -67,6 +63,76 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation-name: enter;
+    animation-duration: 300ms;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+
+  .animate-out {
+      animation-name: exit;
+      animation-duration: 200ms;
+      animation-fill-mode: both;
+      animation-timing-function: ease-in;
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translate(0, 10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes exit {
+    from {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate(0, -10px);
+    }
+  }
+
+  .fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  .fade-in-delay-1 {
+    animation: fade-in 0.5s ease-out 0.2s forwards;
+  }
+  .fade-in-delay-2 {
+    animation: fade-in 0.5s ease-out 0.4s forwards;
+  }
+  .fade-in-delay-3 {
+    animation: fade-in 0.5s ease-out 0.6s forwards;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .slide-up-fade-in {
+    animation: slide-up-fade-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  @keyframes slide-up-fade-in {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
