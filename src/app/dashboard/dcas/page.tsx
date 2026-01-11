@@ -1,5 +1,9 @@
-import type { Metadata } from "next";
+
+"use client";
+
+import * as React from 'react';
 import { getDCAs, getUser } from "@/lib/data";
+import type { DCA, User } from '@/lib/definitions';
 import {
   Card,
   CardContent,
@@ -18,15 +22,29 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
-export const metadata: Metadata = {
-  title: 'DCA Management | FedEx Recovery Ops',
-  description: 'Monitor and manage Debt Collection Agencies.',
-};
+export default function DcasPage() {
+  const [user, setUser] = React.useState<User | null>(null);
+  const [dcas, setDcas] = React.useState<DCA[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
-export default async function DcasPage() {
-  const user = await getUser();
-  const dcas = await getDCAs(user.role === 'dca_admin' ? { dcaId: user.dcaId } : {});
+  React.useEffect(() => {
+    async function fetchData() {
+      const userData = await getUser();
+      setUser(userData);
+      const dcaData = await getDCAs(userData.role === 'dca_admin' ? { dcaId: userData.dcaId } : {});
+      setDcas(dcaData);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
 
+  if (loading) {
+    return <div>Loading...</div>; // Or a skeleton loader
+  }
+  
+  if (!user) {
+    return <div>Error loading data.</div>
+  }
 
   return (
     <div>

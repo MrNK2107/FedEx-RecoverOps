@@ -1,3 +1,7 @@
+
+"use client";
+
+import * as React from 'react';
 import { notFound } from 'next/navigation';
 import {
   Card,
@@ -6,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getCaseById, getDCAById, MOCK_USERS } from "@/lib/data";
+import type { Case, DCA, User } from '@/lib/definitions';
 import { Badge } from "@/components/ui/badge";
 import {
   DollarSign,
@@ -20,14 +25,49 @@ import { StrategyView } from './_components/strategy-view';
 import { AllocationView } from './_components/allocation-view';
 import { format } from 'date-fns';
 
+export default function CaseDetailPage({ params }: { params: { id: string } }) {
+  const [caseData, setCaseData] = React.useState<Case | null>(null);
+  const [dca, setDca] = React.useState<DCA | null>(null);
+  const [employee, setEmployee] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  
+  React.useEffect(() => {
+    async function fetchData() {
+        try {
+            const fetchedCase = await getCaseById(params.id);
+            if (!fetchedCase) {
+                notFound();
+                return;
+            }
+            setCaseData(fetchedCase);
 
-export default async function CaseDetailPage({ params }: { params: { id: string } }) {
-  const caseData = await getCaseById(params.id);
-  if (!caseData) {
-    notFound();
+            if (fetchedCase.assignedDCAId) {
+                const fetchedDca = await getDCAById(fetchedCase.assignedDCAId);
+                setDca(fetchedDca || null);
+            }
+            if (fetchedCase.assignedDCAEmployeeId) {
+                const fetchedEmployee = MOCK_USERS.find(u => u.id === fetchedCase.assignedDCAEmployeeId);
+                setEmployee(fetchedEmployee || null);
+            }
+        } catch (error) {
+            console.error("Failed to fetch case details", error);
+            // Handle error state
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchData();
+  }, [params.id]);
+
+  if (loading) {
+      return <div>Loading case details...</div>
   }
-  const dca = caseData.assignedDCAId ? await getDCAById(caseData.assignedDCAId) : null;
-  const employee = caseData.assignedDCAEmployeeId ? MOCK_USERS.find(u => u.id === caseData.assignedDCAEmployeeId) : null;
+
+  if (!caseData) {
+    // notFound() must be called in a server component or during build.
+    // In a client component, you'd handle this differently, e.g., show a not found message.
+    return <div>Case not found.</div>;
+  }
 
   const statusStyles: Record<typeof caseData.status, string> = {
     "New": "bg-blue-100 text-blue-800",

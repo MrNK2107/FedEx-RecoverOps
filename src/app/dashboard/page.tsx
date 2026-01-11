@@ -1,3 +1,7 @@
+
+'use client';
+
+import * as React from 'react';
 import type { Metadata } from 'next';
 import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
 import {
@@ -8,21 +12,37 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getCases, getUser } from '@/lib/data';
+import type { Case, User } from '@/lib/definitions';
 import { CaseTable } from '@/components/dashboard/cases/case-table';
 import { AddCaseDialog } from '@/components/dashboard/cases/add-case-dialog';
 
-export const metadata: Metadata = {
-  title: 'Dashboard | FedEx Recovery Ops',
-  description: 'Centralized Case Registry and Overview',
-};
+export default function DashboardPage() {
+  const [user, setUser] = React.useState<User | null>(null);
+  const [cases, setCases] = React.useState<Case[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
-export default async function DashboardPage() {
-  const user = await getUser();
-  const cases = await getCases(user.role === 'dca_admin' ? { dcaId: user.dcaId } : {});
+  React.useEffect(() => {
+    async function fetchData() {
+      const userData = await getUser();
+      setUser(userData);
+      const caseData = await getCases(userData.role === 'dca_admin' ? { dcaId: userData.dcaId } : {});
+      setCases(caseData);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
 
   const totalAmount = cases.reduce((sum, item) => sum + item.amount, 0);
   const activeCases = cases.filter(c => c.status === 'In Progress' || c.status === 'Assigned').length;
   const closedThisMonth = cases.filter(c => c.status === 'Settled').length; // Mock data for now
+
+  if (loading) {
+    return <div>Loading...</div>; // Or a proper skeleton loader
+  }
+  
+  if (!user) {
+    return <div>Error loading user.</div>
+  }
   
   return (
     <div className="flex w-full flex-col">

@@ -1,4 +1,7 @@
 
+"use client";
+
+import * as React from 'react';
 import Link from "next/link";
 import Image from 'next/image';
 import {
@@ -10,7 +13,6 @@ import {
   Search,
   PanelLeft,
   LogOut,
-  ChevronsRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -25,11 +27,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/icons/logo";
 import { getUser } from "@/lib/data";
+import type { User } from '@/lib/definitions';
 import { Badge } from "../ui/badge";
 import { RunAllocationDialog } from "./cases/run-allocation-dialog";
 
-export async function DashboardHeader() {
-  const user = await getUser();
+export function DashboardHeader() {
+  const [user, setUser] = React.useState<User | null>(null);
+
+  React.useEffect(() => {
+    async function fetchUser() {
+        const userData = await getUser();
+        setUser(userData);
+    }
+    fetchUser();
+  }, [])
+  
+  if (!user) {
+    return (
+        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
+            <div className="w-full flex-1">
+                <div className="h-8 w-48 bg-muted rounded-md animate-pulse" />
+            </div>
+            <div className="h-10 w-10 bg-muted rounded-full animate-pulse" />
+        </header>
+    );
+  }
 
   const roleDisplay: Record<typeof user.role, string> = {
     fedex_admin: 'FedEx Admin',

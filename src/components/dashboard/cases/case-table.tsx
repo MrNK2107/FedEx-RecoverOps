@@ -1,3 +1,7 @@
+
+"use client";
+
+import * as React from 'react';
 import Link from 'next/link';
 import { MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +28,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Case } from "@/lib/definitions";
-import { getDCAById } from "@/lib/data";
+import type { Case, DCA } from "@/lib/definitions";
+import { getDCAs } from "@/lib/data";
 
 const statusStyles: Record<Case['status'], string> = {
   "New": "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border-blue-300",
@@ -36,12 +40,21 @@ const statusStyles: Record<Case['status'], string> = {
   "Closed": "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border-gray-300",
 };
 
+export function CaseTable({ cases }: { cases: Case[] }) {
+  const [dcaMap, setDcaMap] = React.useState<Record<string, string>>({});
 
-export async function CaseTable({ cases }: { cases: Case[] }) {
-  
-  const dcaData = await Promise.all(
-    cases.map(c => c.assignedDCAId ? getDCAById(c.assignedDCAId) : Promise.resolve(undefined))
-  );
+  React.useEffect(() => {
+    async function fetchDcas() {
+      const allDcas = await getDCAs();
+      const map = allDcas.reduce((acc, dca) => {
+        acc[dca.id] = dca.name;
+        return acc;
+      }, {} as Record<string, string>);
+      setDcaMap(map);
+    }
+    fetchDcas();
+  }, []);
+
 
   return (
     <Card>
@@ -67,7 +80,7 @@ export async function CaseTable({ cases }: { cases: Case[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {cases.map((caseItem, index) => (
+            {cases.map((caseItem) => (
               <TableRow key={caseItem.id}>
                 <TableCell>
                   <div className="font-medium">{caseItem.customerName}</div>
@@ -86,7 +99,7 @@ export async function CaseTable({ cases }: { cases: Case[] }) {
                   </Badge>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {dcaData[index]?.name || 'Unassigned'}
+                  {caseItem.assignedDCAId ? dcaMap[caseItem.assignedDCAId] : 'Unassigned'}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">{caseItem.agingDays} days</TableCell>
                 <TableCell className="text-right">${caseItem.amount.toLocaleString()}</TableCell>
