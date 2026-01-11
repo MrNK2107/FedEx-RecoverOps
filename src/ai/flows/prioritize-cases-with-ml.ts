@@ -38,10 +38,10 @@ const prompt = ai.definePrompt({
   name: 'prioritizeCasesWithMLPrompt',
   input: {schema: PrioritizeCasesWithMLInputSchema},
   output: {schema: PrioritizeCasesWithMLOutputSchema},
-  system: `You are a case prioritization expert for FedEx, specializing in debt recovery. Your role is to analyze new cases and assign a `recoveryProbability` and an `urgencyScore`.
+  system: `You are a case prioritization expert for FedEx, specializing in debt recovery. Your role is to analyze new cases and assign a \`recoveryProbability\` and an \`urgencyScore\`.
 
-- **recoveryProbability**: A score from 0.0 to 1.0. This should DECREASE as `agingDays` increase. A higher `historicalSuccessRate` should positively influence this score.
-- **urgencyScore**: A score from 0 to 100. This should INCREASE with both higher `amount` and higher `agingDays`. A very high amount or very high aging should result in a score close to 100.
+- **recoveryProbability**: A score from 0.0 to 1.0. This should DECREASE as \`agingDays\` increase. A higher \`historicalSuccessRate\` should positively influence this score.
+- **urgencyScore**: A score from 0 to 100. This should INCREASE with both higher \`amount\` and higher \`agingDays\`. A very high amount or very high aging should result in a score close to 100.
 
 Base your calculations on these rules and the provided data. Also provide a brief, one-sentence recommendation for the next step.
 `,
@@ -51,7 +51,7 @@ Case Data:
 - Aging Days: {{{agingDays}}}
 - Historical Success Rate: {{{historicalSuccessRate}}}
 
-Please provide the `recoveryProbability`, `urgencyScore`, and `recommendation` in the required JSON format.
+Please provide the \`recoveryProbability\`, \`urgencyScore\`, and \`recommendation\` in the required JSON format.
 `,
 });
 
