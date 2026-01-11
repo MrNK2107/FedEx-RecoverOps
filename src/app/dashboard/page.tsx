@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getCases } from '@/lib/data';
+import { getCases, getUser } from '@/lib/data';
 import { CaseTable } from '@/components/dashboard/cases/case-table';
 import { AddCaseDialog } from '@/components/dashboard/cases/add-case-dialog';
 
@@ -17,7 +17,8 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const cases = await getCases();
+  const user = await getUser();
+  const cases = await getCases(user.role === 'dca_admin' ? { dcaId: user.dcaId } : {});
 
   const totalAmount = cases.reduce((sum, item) => sum + item.amount, 0);
   const activeCases = cases.filter(c => c.status === 'In Progress' || c.status === 'Assigned').length;
@@ -31,7 +32,7 @@ export default async function DashboardPage() {
           <p className="text-muted-foreground">Welcome back, here's a look at your recovery portfolio.</p>
         </div>
         <div>
-          <AddCaseDialog />
+          {user.role === 'fedex_admin' && <AddCaseDialog />}
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -82,7 +83,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(cases.reduce((sum, c) => sum + c.sla.breachRisk, 0) / cases.length * 100).toFixed(1)}%
+              {cases.length > 0 ? (cases.reduce((sum, c) => sum + c.sla.breachRisk, 0) / cases.length * 100).toFixed(1) : 0}%
             </div>
             <p className="text-xs text-muted-foreground">
               Average SLA breach prediction

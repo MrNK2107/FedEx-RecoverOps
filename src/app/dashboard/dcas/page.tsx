@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getDCAs } from "@/lib/data";
+import { getDCAs, getUser } from "@/lib/data";
 import {
   Card,
   CardContent,
@@ -24,7 +24,9 @@ export const metadata: Metadata = {
 };
 
 export default async function DcasPage() {
-  const dcas = await getDCAs();
+  const user = await getUser();
+  const dcas = await getDCAs(user.role === 'dca_admin' ? { dcaId: user.dcaId } : {});
+
 
   return (
     <div>
@@ -37,7 +39,7 @@ export default async function DcasPage() {
         <CardHeader>
           <CardTitle>Agency Performance</CardTitle>
           <CardDescription>
-            An overview of all registered Debt Collection Agencies.
+            {user.role === 'fedex_admin' ? 'An overview of all registered Debt Collection Agencies.' : 'An overview of your agency performance.'}
           </CardDescription>
         </CardHeader>
         <CardContent>

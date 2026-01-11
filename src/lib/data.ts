@@ -63,18 +63,25 @@ const generateMockCases = (count: number): Case[] => {
 let MOCK_CASES: Case[] = generateMockCases(25);
 
 // Simulate a database
-export const getCases = async (filters?: { status?: Case['status'] }): Promise<Case[]> => {
+export const getCases = async (filters?: { status?: Case['status'], dcaId?: string }): Promise<Case[]> => {
+  let cases = MOCK_CASES;
   if (filters?.status) {
-    return Promise.resolve(MOCK_CASES.filter(c => c.status === filters.status));
+    cases = cases.filter(c => c.status === filters.status);
   }
-  return Promise.resolve(MOCK_CASES);
+  if (filters?.dcaId) {
+    cases = cases.filter(c => c.assignedDCAId === filters.dcaId);
+  }
+  return Promise.resolve(cases);
 };
 
 export const getCaseById = async (id: string): Promise<Case | undefined> => {
   return Promise.resolve(MOCK_CASES.find(c => c.id === id));
 };
 
-export const getDCAs = async (): Promise<DCA[]> => {
+export const getDCAs = async (filters?: { dcaId?: string }): Promise<DCA[]> => {
+  if (filters?.dcaId) {
+    return Promise.resolve(MOCK_DCAS.filter(dca => dca.id === filters.dcaId));
+  }
   return Promise.resolve(MOCK_DCAS);
 };
 

@@ -23,9 +23,9 @@ import {
   LineChart,
   Line,
 } from 'recharts';
-import { getDCAs, getCases } from "@/lib/data";
+import { getDCAs, getCases, getUser } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
-import type { DCA, Case } from "@/lib/definitions";
+import type { DCA, Case, User } from "@/lib/definitions";
 
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
@@ -39,6 +39,7 @@ const recoveryOverTimeData = [
 ];
 
 export default function AnalyticsPage() {
+  const [user, setUser] = useState<User | null>(null);
   const [dcas, setDcas] = useState<DCA[]>([]);
   const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +47,15 @@ export default function AnalyticsPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [dcaData, caseData] = await Promise.all([getDCAs(), getCases()]);
+        const userData = await getUser();
+        setUser(userData);
+        
+        const dcaId = userData.role === 'dca_admin' ? userData.dcaId : undefined;
+        const [dcaData, caseData] = await Promise.all([
+            getDCAs(dcaId ? { dcaId } : {}), 
+            getCases(dcaId ? { dcaId } : {})
+        ]);
+        
         setDcas(dcaData);
         setCases(caseData);
       } catch (error) {
@@ -89,7 +98,7 @@ export default function AnalyticsPage() {
       <div>
         <h1 className="font-headline text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
         <p className="text-muted-foreground">
-          Deep dive into DCA performance and case distribution metrics.
+          {user?.role === 'fedex_admin' ? 'Deep dive into DCA performance and case distribution metrics.' : 'Deep dive into your agency performance and case distribution metrics.'}
         </p>
       </div>
 

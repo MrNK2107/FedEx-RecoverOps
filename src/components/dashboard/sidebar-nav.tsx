@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import * as React from "react";
 import { Bell, Home, Briefcase, BarChart3, Settings } from "lucide-react";
 import { Logo } from "@/components/icons/logo";
 import { Button } from "@/components/ui/button";
@@ -14,16 +15,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { getUser } from "@/lib/data";
+import type { User } from "@/lib/definitions";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Overview" },
-  { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs" },
+  { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs", roles: ['fedex_admin', 'dca_admin'] },
   { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const [user, setUser] = React.useState<User | null>(null);
+
+  React.useEffect(() => {
+    async function fetchUser() {
+        const userData = await getUser();
+        setUser(userData);
+    }
+    fetchUser();
+  }, [])
+
+  const filteredNavItems = navItems.filter(item => {
+    if (!user || !item.roles) return true;
+    return item.roles.includes(user.role);
+  });
 
   return (
     <div className="hidden border-r bg-background md:block">
@@ -40,7 +57,7 @@ export function SidebarNav() {
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {navItems.map(({ href, icon: Icon, label }) => (
+            {filteredNavItems.map(({ href, icon: Icon, label }) => (
               <Link
                 key={href}
                 href={href}
@@ -74,5 +91,3 @@ export function SidebarNav() {
     </div>
   );
 }
-
-    

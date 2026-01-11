@@ -37,6 +37,18 @@ export async function DashboardHeader() {
     dca_employee: 'DCA Employee',
   }
 
+  const navItems = [
+    { href: "/dashboard", icon: Home, label: "Overview" },
+    { href: "/dashboard/dcas", icon: Briefcase, label: "DCAs", roles: ['fedex_admin', 'dca_admin'] },
+    { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
+    { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+  ];
+
+  const filteredNavItems = navItems.filter(item => {
+    if (!item.roles) return true;
+    return item.roles.includes(user.role);
+  });
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
       <Sheet>
@@ -55,34 +67,16 @@ export async function DashboardHeader() {
               <Logo className="h-6 w-6 text-primary" />
               <span className="sr-only">Recovery Ops</span>
             </Link>
-            <Link
-              href="/dashboard"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <Home className="h-5 w-5" />
-              Overview
-            </Link>
-            <Link
-              href="/dashboard/dcas"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-            >
-              <Briefcase className="h-5 w-5" />
-              DCAs
-            </Link>
-             <Link
-              href="/dashboard/analytics"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <BarChart3 className="h-5 w-5" />
-              Analytics
-            </Link>
-             <Link
-              href="/dashboard/settings"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <Settings className="h-5 w-5" />
-              Settings
-            </Link>
+             {filteredNavItems.map(({ href, icon: Icon, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+              >
+                <Icon className="h-5 w-5" />
+                {label}
+              </Link>
+            ))}
           </nav>
         </SheetContent>
       </Sheet>
@@ -143,5 +137,3 @@ export async function DashboardHeader() {
     </header>
   );
 }
-
-    
